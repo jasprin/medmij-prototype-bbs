@@ -1,0 +1,144 @@
+import { useParams, useNavigate } from "react-router-dom";
+import AppLayout from "@/components/AppLayout";
+import ImageViewer from "@/components/ImageViewer";
+import ReportViewer from "@/components/ReportViewer";
+import DownloadDialog from "@/components/DownloadDialog";
+import LinkedDocumentCard from "@/components/LinkedDocumentCard";
+import { documents, getLinkedDocuments } from "@/data/testdata";
+import { ArrowLeft, Calendar, Building2, User, FileImage } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+function DetailPage() {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+
+  const doc = documents.find((d) => d.id === id);
+  if (!doc) {
+    return (
+      <AppLayout>
+        <div className="text-center py-16">
+          <p className="text-muted-foreground">Document niet gevonden.</p>
+          <Button variant="outline" onClick={() => navigate("/beelden")} className="mt-4">
+            Terug naar overzicht
+          </Button>
+        </div>
+      </AppLayout>
+    );
+  }
+
+  const linkedDocs = getLinkedDocuments(doc);
+  const formatDate = (iso: string) =>
+    new Date(iso).toLocaleDateString("nl-NL", { day: "2-digit", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" });
+
+  return (
+    <AppLayout>
+      {/* Back button */}
+      <Button
+        variant="ghost"
+        onClick={() => navigate("/beelden")}
+        className="gap-2 mb-4 -ml-2"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        Terug naar overzicht
+      </Button>
+
+      <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
+        {/* Main content */}
+        <div>
+          <h1 className="text-2xl font-bold mb-4">
+            {doc.title || <span className="italic text-muted-foreground">Titel ontbreekt</span>}
+          </h1>
+
+          {/* Metadata */}
+          <div className="flex flex-wrap gap-4 mb-6 text-sm">
+            <span className="flex items-center gap-1.5 text-muted-foreground">
+              <Calendar className="w-4 h-4" />
+              {formatDate(doc.date)}
+            </span>
+            <span className="flex items-center gap-1.5 text-muted-foreground">
+              <Building2 className="w-4 h-4" />
+              {doc.organization}
+            </span>
+            {doc.practitioner && (
+              <span className="flex items-center gap-1.5 text-muted-foreground">
+                <User className="w-4 h-4" />
+                {doc.practitioner}
+              </span>
+            )}
+            {doc.modalityFriendly && (
+              <span className="flex items-center gap-1.5 text-muted-foreground">
+                <FileImage className="w-4 h-4" />
+                {doc.modalityFriendly}
+              </span>
+            )}
+          </div>
+
+          {/* Viewer */}
+          {doc.type === "image" ? (
+            <ImageViewer title={doc.title || "Beeld"} />
+          ) : (
+            <ReportViewer title={doc.title || "Verslag"} />
+          )}
+
+          {/* Download section */}
+          <div className="mt-6">
+            <h2 className="text-lg font-semibold mb-3">Downloaden</h2>
+            <DownloadDialog doc={doc} />
+          </div>
+        </div>
+
+        {/* Sidebar */}
+        <aside className="space-y-6">
+          {/* Linked documents R5 */}
+          {linkedDocs.length > 0 && (
+            <div>
+              <h2 className="text-sm font-semibold mb-3 uppercase tracking-wide text-muted-foreground">
+                Gekoppelde documenten
+              </h2>
+              <div className="space-y-2">
+                {linkedDocs.map((linked) => (
+                  <LinkedDocumentCard key={linked.id} doc={linked} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Document details */}
+          <div className="bg-card border rounded-lg p-4">
+            <h2 className="text-sm font-semibold mb-3 uppercase tracking-wide text-muted-foreground">
+              Details
+            </h2>
+            <dl className="space-y-2 text-sm">
+              <div>
+                <dt className="text-muted-foreground">Type</dt>
+                <dd className="font-medium">{doc.type === "image" ? "Beeld" : "Verslag"}</dd>
+              </div>
+              <div>
+                <dt className="text-muted-foreground">Onderzoeksdatum</dt>
+                <dd className="font-medium">{formatDate(doc.date)}</dd>
+              </div>
+              <div>
+                <dt className="text-muted-foreground">Zorgaanbieder</dt>
+                <dd className="font-medium">{doc.organization}</dd>
+              </div>
+              {doc.practitioner && (
+                <div>
+                  <dt className="text-muted-foreground">Uitvoerend zorgverlener</dt>
+                  <dd className="font-medium">{doc.practitioner}</dd>
+                </div>
+              )}
+              {doc.modalityFriendly && (
+                <div>
+                  <dt className="text-muted-foreground">Type beeld</dt>
+                  <dd className="font-medium">{doc.modalityFriendly}</dd>
+                </div>
+              )}
+            </dl>
+          </div>
+        </aside>
+      </div>
+    </AppLayout>
+  );
+}
+
+export default DetailPage;
