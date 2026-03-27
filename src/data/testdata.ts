@@ -1,3 +1,5 @@
+const DICOM_BASE = "https://raw.githubusercontent.com/Stichting-MedMij/MedMij-R4-ImageAvailability/1.0.0-rc.2/test/dicom/XxxAansluittestB_B/";
+
 export interface DocumentItem {
   id: string;
   type: "image" | "report";
@@ -11,6 +13,8 @@ export interface DocumentItem {
   snomedCode: string;
   snomedDisplay: string;
   patientDisplay: string;
+  dicomUrls?: string[];
+  reportId?: string;
 }
 
 export const patient = {
