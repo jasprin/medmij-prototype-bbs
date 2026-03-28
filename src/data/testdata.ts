@@ -94,8 +94,9 @@ export const documents: DocumentItem[] = [
     patientDisplay: "B. XXX-Aansluittest-B",
     reportId: "rpt-5-3",
   },
+];
 
-];(doc: DocumentItem): DocumentItem[] {
+export function getLinkedDocuments(doc: DocumentItem): DocumentItem[] {
   if (!doc.accessionNumber) return [];
   return documents.filter(
     (d) => d.accessionNumber === doc.accessionNumber && d.id !== doc.id
