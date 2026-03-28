@@ -98,36 +98,17 @@ function ReportViewer({ title, reportId }: ReportViewerProps) {
   );
 }
 
-/** Fallback simulated report for documents without PDF data */
+/** Fallback when no PDF data is available */
 function SimulatedReport({ title }: { title: string }) {
   return (
     <div className="bg-card border rounded-lg overflow-hidden">
       <div className="p-3 border-b bg-muted/30">
         <span className="text-sm font-medium">{title}</span>
       </div>
-      <div className="p-8 min-h-[400px] flex flex-col items-center justify-center">
-        <FileText className="w-16 h-16 text-muted-foreground/30 mb-4" aria-hidden="true" />
-        <div className="max-w-md text-center space-y-4">
-          <p className="text-sm text-muted-foreground">
-            Gesimuleerd PDF-verslag (Prototype)
-          </p>
-          <div className="text-left bg-muted/30 rounded-lg p-6 space-y-3">
-            <h3 className="font-semibold text-sm">Radiologieverslag</h3>
-            <div className="space-y-2 text-sm">
-              <p><span className="font-medium">Onderzoek:</span> {title}</p>
-              <p><span className="font-medium">Datum:</span> 25 februari 2025</p>
-              <p><span className="font-medium">Aanvrager:</span> Huisarts</p>
-              <p className="mt-3"><span className="font-medium">Bevindingen:</span></p>
-              <p className="text-muted-foreground">
-                Dit is een gesimuleerd verslag voor prototype-doeleinden.
-              </p>
-              <p className="mt-3"><span className="font-medium">Conclusie:</span></p>
-              <p className="text-muted-foreground">
-                Geen afwijkingen gezien. Controle over 6 maanden aanbevolen.
-              </p>
-            </div>
-          </div>
-        </div>
+      <div className="flex flex-col items-center justify-center min-h-[400px]">
+        <FileText className="w-12 h-12 text-muted-foreground/20 mb-3" />
+        <p className="text-sm text-muted-foreground">Geen verslagdata beschikbaar</p>
+        <p className="text-xs text-muted-foreground/50 mt-1">Dit verslag is niet opgenomen in de testdata</p>
       </div>
     </div>
   );
