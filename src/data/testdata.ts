@@ -95,7 +95,7 @@ export const documents: DocumentItem[] = [
     reportId: "rpt-5-3",
   },
 
-export function getLinkedDocuments(doc: DocumentItem): DocumentItem[] {
+];(doc: DocumentItem): DocumentItem[] {
   if (!doc.accessionNumber) return [];
   return documents.filter(
     (d) => d.accessionNumber === doc.accessionNumber && d.id !== doc.id
