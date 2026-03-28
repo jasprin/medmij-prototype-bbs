@@ -75,9 +75,9 @@ function DetailPage() {
 
           {/* Viewer */}
           {doc.type === "image" ? (
-            <ImageViewer title={doc.title || "Beeld"} />
+            <ImageViewer title={doc.title || "Beeld"} dicomUrls={doc.dicomUrls} />
           ) : (
-            <ReportViewer title={doc.title || "Verslag"} />
+            <ReportViewer title={doc.title || "Verslag"} reportId={doc.reportId} />
           )}
 
           {/* Download section */}
