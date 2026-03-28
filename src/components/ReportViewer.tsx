@@ -2,8 +2,8 @@ import { useState, useMemo } from "react";
 import { FileText, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Document, Page, pdfjs } from "react-pdf";
-import "react-pdf/dist/esm/Page/AnnotationLayer.css";
-import "react-pdf/dist/esm/Page/TextLayer.css";
+import "react-pdf/dist/Page/AnnotationLayer.css";
+import "react-pdf/dist/Page/TextLayer.css";
 import { base64ToUint8Array, reportPdfBase64 } from "@/data/reportData";
 
 // Configure PDF.js worker
