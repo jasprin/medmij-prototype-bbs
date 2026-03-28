@@ -41,6 +41,9 @@ export const documents: DocumentItem[] = [
     snomedCode: "77477000",
     snomedDisplay: "CT",
     patientDisplay: "B. XXX-Aansluittest-B",
+    dicomUrls: [
+      `${DICOM_BASE}Medmij_Pgo_Test_Ct%20-%2093797336/Medmij_Pgo_Test_Ct/IM-0001-0001.dcm`,
+    ],
   },
   {
     id: "img-5-2",
@@ -55,6 +58,9 @@ export const documents: DocumentItem[] = [
     snomedCode: "77477000",
     snomedDisplay: "CT",
     patientDisplay: "B. XXX-Aansluittest-B",
+    dicomUrls: [
+      `${DICOM_BASE}Medmij_Pgo_Ct%20-%2074224547/Medmij_Pgo_Ct/IM-0001-0001.dcm`,
+    ],
   },
   {
     id: "img-5-3",
@@ -69,6 +75,9 @@ export const documents: DocumentItem[] = [
     snomedCode: "44491008",
     snomedDisplay: "röntgendoorlichting",
     patientDisplay: "B. XXX-Aansluittest-B",
+    dicomUrls: [
+      `${DICOM_BASE}Cr_Cwk_Medmij%20-%206003297769/Bekken_AP_1/IM-0006-0001.dcm`,
+    ],
   },
   {
     id: "rpt-5-3",
@@ -83,51 +92,8 @@ export const documents: DocumentItem[] = [
     snomedCode: "44491008",
     snomedDisplay: "röntgendoorlichting",
     patientDisplay: "B. XXX-Aansluittest-B",
+    reportId: "rpt-5-3",
   },
-  // Extra test data for richer demo with multiple organizations
-  {
-    id: "img-extra-1",
-    type: "image",
-    title: "Echo abdomen",
-    date: "2024-06-10T09:30:00+02:00",
-    organization: "OLVG Oost",
-    practitioner: "Dr. J. ter Velde",
-    modality: "US",
-    modalityFriendly: "Echo",
-    accessionNumber: "ACC-004",
-    snomedCode: "16310003",
-    snomedDisplay: "echografie",
-    patientDisplay: "B. XXX-Aansluittest-B",
-  },
-  {
-    id: "rpt-extra-1",
-    type: "report",
-    title: "Echo abdomen",
-    date: "2024-06-10T10:15:00+02:00",
-    organization: "OLVG Oost",
-    practitioner: "Dr. J. ter Velde",
-    modality: null,
-    modalityFriendly: null,
-    accessionNumber: "ACC-004",
-    snomedCode: "16310003",
-    snomedDisplay: "echografie",
-    patientDisplay: "B. XXX-Aansluittest-B",
-  },
-  {
-    id: "img-extra-2",
-    type: "image",
-    title: "MRI knie links",
-    date: "2024-11-05T14:20:00+01:00",
-    organization: "Spaarne Gasthuis",
-    practitioner: "Dr. A. Bakker",
-    modality: "MR",
-    modalityFriendly: "MRI-scan",
-    accessionNumber: "ACC-005",
-    snomedCode: "113091000",
-    snomedDisplay: "MRI",
-    patientDisplay: "B. XXX-Aansluittest-B",
-  },
-];
 
 export function getLinkedDocuments(doc: DocumentItem): DocumentItem[] {
   if (!doc.accessionNumber) return [];
