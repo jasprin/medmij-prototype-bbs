@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
-import { base64ToUint8Array, reportPdfBase64 } from "@/data/reportData";
+import { reportPdfBase64 } from "@/data/reportData";
 
 // Configure PDF.js worker
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
@@ -20,12 +20,12 @@ function ReportViewer({ title, reportId }: ReportViewerProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  const pdfData = useMemo(() => {
+  const pdfDataUrl = useMemo(() => {
     if (!reportId || !reportPdfBase64[reportId]) return null;
-    return base64ToUint8Array(reportPdfBase64[reportId]);
+    return `data:application/pdf;base64,${reportPdfBase64[reportId]}`;
   }, [reportId]);
 
-  if (!pdfData) {
+  if (!pdfDataUrl) {
     return <SimulatedReport title={title} />;
   }
 
@@ -75,7 +75,7 @@ function ReportViewer({ title, reportId }: ReportViewerProps) {
           </div>
         )}
         <Document
-          file={{ data: pdfData }}
+          file={pdfDataUrl}
           onLoadSuccess={({ numPages: n }) => {
             setNumPages(n);
             setLoading(false);
