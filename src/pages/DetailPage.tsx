@@ -75,11 +75,13 @@ function DetailPage() {
           </div>
 
           {/* Viewer */}
-          {doc.type === "image" ? (
-            <ImageViewer title={doc.title || "Beeld"} dicomUrls={doc.dicomUrls} />
-          ) : (
-            <ReportViewer title={doc.title || "Verslag"} reportId={doc.reportId} />
-          )}
+          <Suspense fallback={<div className="flex items-center justify-center min-h-[400px] bg-card border rounded-lg"><Loader2 className="w-8 h-8 animate-spin text-muted-foreground" /></div>}>
+            {doc.type === "image" ? (
+              <ImageViewer title={doc.title || "Beeld"} dicomUrls={doc.dicomUrls} />
+            ) : (
+              <ReportViewer title={doc.title || "Verslag"} reportId={doc.reportId} />
+            )}
+          </Suspense>
 
           {/* Download section */}
           <div className="mt-6">
