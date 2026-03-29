@@ -54,7 +54,7 @@ function DetailPage() {
           <div className="flex flex-wrap gap-4 mb-6 text-sm">
             <span className="flex items-center gap-1.5 text-muted-foreground">
               <Calendar className="w-4 h-4" />
-              {formatDate(doc.date)}
+              {formatDateTime(doc.date)}
             </span>
             <span className="flex items-center gap-1.5 text-muted-foreground">
               <Building2 className="w-4 h-4" />
@@ -116,7 +116,7 @@ function DetailPage() {
               </div>
               <div>
                 <dt className="text-muted-foreground">Onderzoeksdatum</dt>
-                <dd className="font-medium">{formatDate(doc.date)}</dd>
+                <dd className="font-medium">{formatDateTime(doc.date)}</dd>
               </div>
               <div>
                 <dt className="text-muted-foreground">Zorgaanbieder</dt>
