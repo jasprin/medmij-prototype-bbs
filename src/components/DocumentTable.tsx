@@ -64,10 +64,10 @@ function DocumentTable({ documents, sortAsc, onToggleSort }: DocumentTableProps)
                     role="row"
                     tabIndex={0}
                     onKeyDown={(e) => e.key === "Enter" && handleRowClick(doc)}
-                    aria-label={`${doc.type === "image" ? "Beeld" : "Verslag"}: ${doc.title || "Titel ontbreekt"}, ${formatDate(doc.date)}`}
+                    aria-label={`${doc.type === "image" ? "Beeld" : "Verslag"}: ${doc.title || "Titel ontbreekt"}, ${formatDateShort(doc.date)}`}
                   >
                     <td className="p-3 text-sm whitespace-nowrap">
-                      <div>{formatDate(doc.date)}</div>
+                      <div>{formatDateShort(doc.date)}</div>
                       <div className="text-xs text-muted-foreground">{formatTime(doc.date)}</div>
                     </td>
                     <td className="p-3">
