@@ -2,7 +2,7 @@ import { DocumentItem, getLinkedDocuments } from "@/data/testdata";
 import { useNavigate } from "react-router-dom";
 import { FileImage, FileText, Link2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-
+import { formatDate } from "@/lib/formatDate";
 interface DocumentTimelineProps {
   documents: DocumentItem[];
 }
@@ -10,8 +10,6 @@ interface DocumentTimelineProps {
 function DocumentTimeline({ documents }: DocumentTimelineProps) {
   const navigate = useNavigate();
 
-  const formatDate = (iso: string) =>
-    new Date(iso).toLocaleDateString("nl-NL", { day: "2-digit", month: "long", year: "numeric" });
 
   // Group by date (day)
   const grouped = documents.reduce<Record<string, DocumentItem[]>>((acc, doc) => {

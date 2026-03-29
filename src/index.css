@@ -53,6 +53,9 @@
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 228 43% 34%;
     --sidebar-ring: 170 38% 50%;
+
+    --viewer-background: 228 32% 15%;
+    --viewer-foreground: 0 0% 90%;
   }
 }
 
