@@ -1,12 +1,15 @@
 import { useParams, useNavigate } from "react-router-dom";
+import { lazy, Suspense } from "react";
 import AppLayout from "@/components/AppLayout";
-import ImageViewer from "@/components/ImageViewer";
-import ReportViewer from "@/components/ReportViewer";
 import DownloadDialog from "@/components/DownloadDialog";
 import LinkedDocumentCard from "@/components/LinkedDocumentCard";
 import { documents, getLinkedDocuments } from "@/data/testdata";
-import { ArrowLeft, Calendar, Building2, User, FileImage } from "lucide-react";
+import { ArrowLeft, Calendar, Building2, User, FileImage, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { formatDateTime } from "@/lib/formatDate";
+
+const ImageViewer = lazy(() => import("@/components/ImageViewer"));
+const ReportViewer = lazy(() => import("@/components/ReportViewer"));
 
 function DetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -27,8 +30,6 @@ function DetailPage() {
   }
 
   const linkedDocs = getLinkedDocuments(doc);
-  const formatDate = (iso: string) =>
-    new Date(iso).toLocaleDateString("nl-NL", { day: "2-digit", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" });
 
   return (
     <AppLayout>
