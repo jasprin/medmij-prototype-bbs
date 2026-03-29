@@ -4,6 +4,7 @@ import { ArrowUpDown, FileImage, FileText, Link2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getLinkedDocuments } from "@/data/testdata";
+import { formatDateShort, formatTime } from "@/lib/formatDate";
 
 interface DocumentTableProps {
   documents: DocumentItem[];
@@ -18,20 +19,6 @@ function DocumentTable({ documents, sortAsc, onToggleSort }: DocumentTableProps)
     navigate(`/beelden/${doc.id}`);
   };
 
-  const formatDate = (iso: string) => {
-    return new Date(iso).toLocaleDateString("nl-NL", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
-  };
-
-  const formatTime = (iso: string) => {
-    return new Date(iso).toLocaleTimeString("nl-NL", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
 
   return (
     <div className="bg-card rounded-lg border overflow-hidden">
