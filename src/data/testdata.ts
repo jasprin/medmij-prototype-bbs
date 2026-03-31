@@ -108,6 +108,9 @@ export const documents: DocumentItem[] = [
     snomedCode: "16310003",
     snomedDisplay: "echografie",
     patientDisplay: "B. XXX-Aansluittest-B",
+    dicomUrls: [
+      `${DICOM_BASE}Cr_Cwk_Medmij%20-%206003297769/Bekken_AP_1/IM-0006-0001.dcm`,
+    ],
   },
   {
     id: "rpt-extra-1",
@@ -122,6 +125,7 @@ export const documents: DocumentItem[] = [
     snomedCode: "16310003",
     snomedDisplay: "echografie",
     patientDisplay: "B. XXX-Aansluittest-B",
+    reportId: "rpt-extra-1",
   },
   {
     id: "img-extra-2",
@@ -136,6 +140,9 @@ export const documents: DocumentItem[] = [
     snomedCode: "113091000",
     snomedDisplay: "MRI",
     patientDisplay: "B. XXX-Aansluittest-B",
+    dicomUrls: [
+      `${DICOM_BASE}Medmij_Pgo_Test_Ct%20-%2093797336/Head_100_Qr40_S2_2/IM-0003-0001.dcm`,
+    ],
   },
 ];
 
