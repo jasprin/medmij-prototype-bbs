@@ -59,7 +59,7 @@ export const documents: DocumentItem[] = [
     snomedDisplay: "CT",
     patientDisplay: "B. XXX-Aansluittest-B",
     dicomUrls: [
-      `${DICOM_BASE}Medmij_Pgo_Ct%20-%2074224547/Medmij_Pgo_Ct/IM-0001-0001.dcm`,
+      `${DICOM_BASE}Medmij_Pgo_Ct%20-%2074224547/Quick_Check_CT_300_1/IM-0001-0001.dcm`,
     ],
   },
   {
