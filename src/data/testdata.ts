@@ -42,7 +42,7 @@ export const documents: DocumentItem[] = [
     snomedDisplay: "CT",
     patientDisplay: "B. XXX-Aansluittest-B",
     dicomUrls: [
-      `${DICOM_BASE}Medmij_Pgo_Test_Ct%20-%2093797336/Head_100_Qr40_S2_2/IM-0003-0001.dcm`,
+      `${DICOM_BASE}Medmij_Pgo_Test_Ct%20-%2093797336/Localizers_1/IM-0004-0001.dcm`,
     ],
   },
   {
@@ -94,7 +94,6 @@ export const documents: DocumentItem[] = [
     patientDisplay: "B. XXX-Aansluittest-B",
     reportId: "rpt-5-3",
   },
-  // Extra test data for richer demo with multiple organizations
   {
     id: "img-extra-1",
     type: "image",
@@ -109,7 +108,7 @@ export const documents: DocumentItem[] = [
     snomedDisplay: "echografie",
     patientDisplay: "B. XXX-Aansluittest-B",
     dicomUrls: [
-      `${DICOM_BASE}Cr_Cwk_Medmij%20-%206003297769/Bekken_AP_1/IM-0006-0001.dcm`,
+      `${DICOM_BASE}Cr_Cwk_Medmij%20-%206003297769/Bekken_AP_2/IM-0007-0001.dcm`,
     ],
   },
   {
@@ -141,7 +140,7 @@ export const documents: DocumentItem[] = [
     snomedDisplay: "MRI",
     patientDisplay: "B. XXX-Aansluittest-B",
     dicomUrls: [
-      `${DICOM_BASE}Medmij_Pgo_Test_Ct%20-%2093797336/Head_100_Qr40_S2_2/IM-0003-0001.dcm`,
+      `${DICOM_BASE}Medmij_Pgo_Ct%20-%2074224547/Patient_Protocol_501/IM-0002-0001.dcm`,
     ],
   },
 ];
