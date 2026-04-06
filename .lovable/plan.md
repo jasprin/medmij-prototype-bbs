@@ -1,51 +1,27 @@
 
 
-## Plan: GitHub issues aanmaken + issues 1-3 oplossen
+## Plan: GitHub issues aanmaken voor nieuwe tijdlijn
 
-### Stap 1: GitHub issues aanmaken via script
-Een edge function of exec-script dat via de GitHub API 3 issues aanmaakt in `jasprin/medmij-prototype-bbs` met het `GITHUB_TOKEN` secret:
+### Wat
+Via de GitHub API 4 issues aanmaken in `jasprin/medmij-prototype-bbs` op basis van het goedgekeurde plan.
 
-1. **PDF-verslagen laden niet** — "Fout bij laden van PDF" voor rpt-5-3 en rpt-extra-1
-2. **Beeld 22-08-2024 identiek aan 05-11-2024** — Beide tonen visueel hetzelfde CT-beeld
-3. **Beeld 10-06-2024 identiek aan 25-02-2025** — Beide tonen dezelfde röntgenfoto
+### Issues
 
-### Stap 2: Fix PDF-verslagen (issue 1)
-**Oorzaak:** De `react-pdf` v10 worker URL gebruikt een `.mjs` pad via unpkg dat niet correct resolvet. 
+**Issue #1: Nieuwe patiënt en complete tijdlijn met 10 onderzoeken**
+Vervang de huidige testdata door een realistische patiënt "M.E. van den Berg" met een tijdlijn van 10 onderzoeken (7 beelden + 4 verslagen) over 3 zorgaanbieders. Elk DICOM-bestand wordt maximaal 1x gebruikt.
 
-**Oplossing:** Wijzig `ReportViewer.tsx` — gebruik de worker vanuit `pdfjs-dist` via een CDN met de juiste URL-structuur voor v10 (bijv. `cdnjs.cloudflare.com` of een inline import via `new URL`).
+**Issue #2: Unieke DICOM-toewijzing — geen hergebruik van bestanden**
+Wijs alle 7 beschikbare DICOM-bestanden uit de GitHub repo elk precies 1x toe aan een tijdlijn-item. Huidige situatie: bestanden worden meermaals gebruikt waardoor beelden identiek lijken.
 
-### Stap 3: Fix identieke beelden (issues 2 + 3)
-Wijs unieke DICOM-bestanden toe in `testdata.ts`. Beschikbare series in de GitHub repo:
+**Issue #3: PDF-verslagen laden niet (worker URL fout)**
+De `react-pdf` v10 worker URL resolvet niet correct, waardoor alle PDF-verslagen "Fout bij laden van PDF" tonen. Fix de worker URL in `ReportViewer.tsx`.
 
-```text
-Studie                          Serie                    Huidige toewijzing
-─────────────────────────────── ──────────────────────── ──────────────────
-Medmij_Pgo_Test_Ct - 93797336  Localizers_1/IM-0004     img-5-1  (22-08)
-                                Head_100_Qr40_S2_2/IM-0003  (vrij)
-Medmij_Pgo_Ct - 74224547       Quick_Check_CT_300_1/IM-0001 img-5-2  (17-01)
-                                Patient_Protocol_501/IM-0002 img-extra-2 (05-11)
-Cr_Cwk_Medmij - 6003297769     Bekken_AP_1/IM-0006      img-5-3  (25-02)
-                                Bekken_AP_2/IM-0007      img-extra-1 (10-06)
-```
+**Issue #4: Verslagdata uitbreiden naar 4 rapporten**
+Update `reportData.ts` met report-ID's die aansluiten bij de nieuwe tijdlijn (rpt-1 t/m rpt-4), zodat verslagen correct laden bij de bijbehorende onderzoeken.
 
-**Nieuwe toewijzing** — elk item krijgt een visueel uniek bestand:
-
-| Item | Datum | Nieuw DICOM-bestand |
-|------|-------|---------------------|
-| img-5-1 | 22-08-2024 | `Medmij_Pgo_Test_Ct/Localizers_1/IM-0004-0001.dcm` (ongewijzigd) |
-| img-5-2 | 17-01-2025 | `Medmij_Pgo_Ct/Quick_Check_CT_300_1/IM-0001-0001.dcm` (ongewijzigd) |
-| img-5-3 | 25-02-2025 | `Cr_Cwk_Medmij/Bekken_AP_1/IM-0006-0001.dcm` (ongewijzigd) |
-| img-extra-1 | 10-06-2024 | `Medmij_Pgo_Test_Ct/Head_100_Qr40_S2_2/IM-0003-0001.dcm` (was Bekken_AP_2) |
-| img-extra-2 | 05-11-2024 | `Cr_Cwk_Medmij/Bekken_AP_2/IM-0007-0001.dcm` (was Patient_Protocol_501) |
-
-Dit zorgt ervoor dat alle 5 beelden uit verschillende series komen en visueel te onderscheiden zijn.
-
-### Technische details
-
-**Bestanden die wijzigen:**
-- `src/components/ReportViewer.tsx` — worker URL fix
-- `src/data/testdata.ts` — DICOM URL-toewijzingen aanpassen voor img-extra-1 en img-extra-2
-
-**Script (eenmalig via exec):**
-- Curl-commando's naar `api.github.com` met het GITHUB_TOKEN om de 3 issues aan te maken
+### Technisch
+- Eenmalig script via `code--exec` met `curl` naar `api.github.com`
+- Gebruikt het bestaande `GITHUB_TOKEN` secret
+- Repository: `jasprin/medmij-prototype-bbs`
+- Issues worden aangemaakt met labels waar mogelijk
 
