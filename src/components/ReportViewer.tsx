@@ -7,7 +7,10 @@ import "react-pdf/dist/Page/TextLayer.css";
 import { reportPdfBase64 } from "@/data/reportData";
 
 // Configure PDF.js worker
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`;
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.mjs",
+  import.meta.url
+).toString();
 
 interface ReportViewerProps {
   title: string;
