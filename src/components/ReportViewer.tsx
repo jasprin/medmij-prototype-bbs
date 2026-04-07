@@ -1,10 +1,10 @@
-import { useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FileText, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
-import { reportPdfBase64 } from "@/data/reportData";
+import { reportPdfSources } from "@/data/reportData";
 
 // Configure PDF.js worker
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -17,18 +17,33 @@ interface ReportViewerProps {
   reportId?: string;
 }
 
+function resolvePdfSource(source: string) {
+  if (source.startsWith("data:") || source.startsWith("/") || source.startsWith("http")) {
+    return source;
+  }
+
+  return `data:application/pdf;base64,${source}`;
+}
+
 function ReportViewer({ title, reportId }: ReportViewerProps) {
   const [numPages, setNumPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  const pdfDataUrl = useMemo(() => {
-    if (!reportId || !reportPdfBase64[reportId]) return null;
-    return `data:application/pdf;base64,${reportPdfBase64[reportId]}`;
+  const pdfSource = useMemo(() => {
+    if (!reportId || !reportPdfSources[reportId]) return null;
+    return resolvePdfSource(reportPdfSources[reportId]);
   }, [reportId]);
 
-  if (!pdfDataUrl) {
+  useEffect(() => {
+    setNumPages(0);
+    setPageNumber(1);
+    setError(false);
+    setLoading(Boolean(pdfSource));
+  }, [pdfSource]);
+
+  if (!pdfSource) {
     return <SimulatedReport title={title} />;
   }
 
@@ -64,7 +79,7 @@ function ReportViewer({ title, reportId }: ReportViewerProps) {
           </div>
         )}
       </div>
-      <div className="flex justify-center p-4 min-h-[500px] bg-muted/10 overflow-auto">
+      <div className="relative flex justify-center p-4 min-h-[500px] bg-muted/10 overflow-auto">
         {loading && (
           <div className="absolute flex flex-col items-center justify-center">
             <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
@@ -77,25 +92,32 @@ function ReportViewer({ title, reportId }: ReportViewerProps) {
             <p className="text-sm text-muted-foreground">Fout bij laden van PDF</p>
           </div>
         )}
-        <Document
-          file={pdfDataUrl}
-          onLoadSuccess={({ numPages: n }) => {
-            setNumPages(n);
-            setLoading(false);
-          }}
-          onLoadError={() => {
-            setError(true);
-            setLoading(false);
-          }}
-          loading={null}
-        >
-          <Page
-            pageNumber={pageNumber}
-            width={560}
-            renderAnnotationLayer
-            renderTextLayer
-          />
-        </Document>
+        {!error && (
+          <Document
+            key={pdfSource}
+            file={pdfSource}
+            onLoadSuccess={({ numPages: n }) => {
+              setNumPages(n);
+              setLoading(false);
+            }}
+            onLoadError={() => {
+              setError(true);
+              setLoading(false);
+            }}
+            onSourceError={() => {
+              setError(true);
+              setLoading(false);
+            }}
+            loading={null}
+          >
+            <Page
+              pageNumber={pageNumber}
+              width={560}
+              renderAnnotationLayer
+              renderTextLayer
+            />
+          </Document>
+        )}
       </div>
     </div>
   );
