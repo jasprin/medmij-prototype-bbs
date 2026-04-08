@@ -1,12 +1,20 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import AppLayout from "@/components/AppLayout";
 import DownloadDialog from "@/components/DownloadDialog";
 import LinkedDocumentCard from "@/components/LinkedDocumentCard";
 import { documents, getLinkedDocuments } from "@/data/testdata";
-import { ArrowLeft, Calendar, Building2, User, FileImage, Loader2 } from "lucide-react";
+import { Calendar, Building2, User, FileImage, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatDateTime } from "@/lib/formatDate";
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 const ImageViewer = lazy(() => import("@/components/ImageViewer"));
 const ReportViewer = lazy(() => import("@/components/ReportViewer"));
@@ -33,15 +41,26 @@ function DetailPage() {
 
   return (
     <AppLayout>
-      {/* Back button */}
-      <Button
-        variant="ghost"
-        onClick={() => navigate("/beelden")}
-        className="gap-2 mb-4 -ml-2"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        Terug naar overzicht
-      </Button>
+      {/* Breadcrumbs */}
+      <Breadcrumb className="mb-4">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link to="/">Home</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link to="/beelden">Beelden en verslagen</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>{doc.title || "Document"}</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
         {/* Main content */}
@@ -92,7 +111,6 @@ function DetailPage() {
 
         {/* Sidebar */}
         <aside className="space-y-6">
-          {/* Linked documents R5 */}
           {linkedDocs.length > 0 && (
             <div>
               <h2 className="text-sm font-semibold mb-3 uppercase tracking-wide text-muted-foreground">
@@ -106,7 +124,6 @@ function DetailPage() {
             </div>
           )}
 
-          {/* Document details */}
           <div className="bg-card border rounded-lg p-4">
             <h2 className="text-sm font-semibold mb-3 uppercase tracking-wide text-muted-foreground">
               Details

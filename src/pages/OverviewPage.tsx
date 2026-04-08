@@ -8,19 +8,23 @@ import DocumentTimeline from "@/components/DocumentTimeline";
 import { documents } from "@/data/testdata";
 import { LayoutList, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 function OverviewPage() {
-  const [view, setView] = useState<"table" | "timeline">("table");
+  const isMobile = useIsMobile();
+  const [view, setView] = useState<"table" | "timeline" | null>(null);
   const [sortAsc, setSortAsc] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedOrg, setSelectedOrg] = useState("all");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
 
+  // Default view based on screen size, but allow manual override
+  const activeView = view ?? (isMobile ? "timeline" : "table");
+
   const filteredDocs = useMemo(() => {
     let result = [...documents];
 
-    // Search filter R9
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
       result = result.filter((d) =>
@@ -31,12 +35,10 @@ function OverviewPage() {
       );
     }
 
-    // Org filter R12
     if (selectedOrg !== "all") {
       result = result.filter((d) => d.organization === selectedOrg);
     }
 
-    // Date filter R8
     if (dateFrom) {
       result = result.filter((d) => new Date(d.date) >= new Date(dateFrom));
     }
@@ -46,7 +48,6 @@ function OverviewPage() {
       result = result.filter((d) => new Date(d.date) <= to);
     }
 
-    // Sort R6
     result.sort((a, b) => {
       const diff = new Date(a.date).getTime() - new Date(b.date).getTime();
       return sortAsc ? diff : -diff;
@@ -82,23 +83,23 @@ function OverviewPage() {
         </p>
         <div className="flex gap-1 bg-muted rounded-lg p-1">
           <Button
-            variant={view === "table" ? "default" : "ghost"}
+            variant={activeView === "table" ? "default" : "ghost"}
             size="sm"
             onClick={() => setView("table")}
             className="gap-1.5"
             aria-label="Tabelweergave"
-            aria-pressed={view === "table"}
+            aria-pressed={activeView === "table"}
           >
             <LayoutList className="w-4 h-4" />
             <span className="hidden sm:inline">Tabel</span>
           </Button>
           <Button
-            variant={view === "timeline" ? "default" : "ghost"}
+            variant={activeView === "timeline" ? "default" : "ghost"}
             size="sm"
             onClick={() => setView("timeline")}
             className="gap-1.5"
             aria-label="Tijdlijnweergave"
-            aria-pressed={view === "timeline"}
+            aria-pressed={activeView === "timeline"}
           >
             <Clock className="w-4 h-4" />
             <span className="hidden sm:inline">Tijdlijn</span>
@@ -106,7 +107,7 @@ function OverviewPage() {
         </div>
       </div>
 
-      {view === "table" ? (
+      {activeView === "table" ? (
         <DocumentTable
           documents={filteredDocs}
           sortAsc={sortAsc}
