@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getLinkedDocuments } from "@/data/testdata";
 import { formatDateShort, formatTime } from "@/lib/formatDate";
+import { useMemo } from "react";
 
 interface DocumentTableProps {
   documents: DocumentItem[];
@@ -12,13 +13,48 @@ interface DocumentTableProps {
   onToggleSort: () => void;
 }
 
+/** Assign alternating background colors to accession groups */
+function useAccessionGroups(documents: DocumentItem[]) {
+  return useMemo(() => {
+    const groupMap = new Map<string, number>();
+    let colorIndex = 0;
+    const result: (number | null)[] = [];
+
+    for (const doc of documents) {
+      if (!doc.accessionNumber) {
+        result.push(null);
+        continue;
+      }
+      if (!groupMap.has(doc.accessionNumber)) {
+        // Only color groups with >1 member
+        const count = documents.filter(d => d.accessionNumber === doc.accessionNumber).length;
+        if (count > 1) {
+          groupMap.set(doc.accessionNumber, colorIndex++);
+        } else {
+          groupMap.set(doc.accessionNumber, -1);
+        }
+      }
+      const idx = groupMap.get(doc.accessionNumber)!;
+      result.push(idx >= 0 ? idx : null);
+    }
+    return result;
+  }, [documents]);
+}
+
+const GROUP_COLORS = [
+  "bg-primary/5",
+  "bg-secondary/5",
+  "bg-accent/5",
+  "bg-muted/40",
+];
+
 function DocumentTable({ documents, sortAsc, onToggleSort }: DocumentTableProps) {
   const navigate = useNavigate();
+  const groups = useAccessionGroups(documents);
 
   const handleRowClick = (doc: DocumentItem) => {
     navigate(`/beelden/${doc.id}`);
   };
-
 
   return (
     <div className="bg-card rounded-lg border overflow-hidden">
@@ -54,13 +90,16 @@ function DocumentTable({ documents, sortAsc, onToggleSort }: DocumentTableProps)
                 </td>
               </tr>
             ) : (
-              documents.map((doc) => {
+              documents.map((doc, idx) => {
                 const linked = getLinkedDocuments(doc);
+                const groupIdx = groups[idx];
+                const groupClass = groupIdx !== null ? GROUP_COLORS[groupIdx % GROUP_COLORS.length] : "";
+
                 return (
                   <tr
                     key={doc.id}
                     onClick={() => handleRowClick(doc)}
-                    className="border-b last:border-b-0 hover:bg-muted/30 cursor-pointer transition-colors"
+                    className={`border-b last:border-b-0 hover:bg-muted/30 cursor-pointer transition-colors ${groupClass}`}
                     role="row"
                     tabIndex={0}
                     onKeyDown={(e) => e.key === "Enter" && handleRowClick(doc)}

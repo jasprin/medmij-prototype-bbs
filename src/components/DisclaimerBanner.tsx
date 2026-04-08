@@ -1,9 +1,25 @@
 import { useState } from "react";
 import { AlertTriangle, Clock, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+
+const STORAGE_KEY = "disclaimer-dismissed";
 
 function DisclaimerBanner() {
-  const [showDisclaimer, setShowDisclaimer] = useState(true);
+  const [showDisclaimer, setShowDisclaimer] = useState(() => {
+    try {
+      return localStorage.getItem(STORAGE_KEY) !== "true";
+    } catch {
+      return true;
+    }
+  });
+
+  const handleDismiss = () => {
+    setShowDisclaimer(false);
+    try {
+      localStorage.setItem(STORAGE_KEY, "true");
+    } catch {
+      // ignore
+    }
+  };
 
   if (!showDisclaimer) return null;
 
@@ -16,7 +32,7 @@ function DisclaimerBanner() {
         aria-label="Disclaimer over interpretatie van beelden en verslagen"
       >
         <button
-          onClick={() => setShowDisclaimer(false)}
+          onClick={handleDismiss}
           className="absolute top-3 right-3 p-1 rounded hover:bg-accent/20 transition-colors"
           aria-label="Disclaimer sluiten"
         >
