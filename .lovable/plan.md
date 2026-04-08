@@ -1,27 +1,33 @@
 
 
-## Plan: GitHub issues aanmaken voor nieuwe tijdlijn
+## Plan: 5 UX-verbeteringen + GitHub issues
 
-### Wat
-Via de GitHub API 4 issues aanmaken in `jasprin/medmij-prototype-bbs` op basis van het goedgekeurde plan.
+### Overzicht
+Eerst 5 GitHub issues aanmaken via een script, daarna de issues implementeren.
 
-### Issues
+### Stap 1: GitHub issues aanmaken (script via `code--exec`)
 
-**Issue #1: Nieuwe patiënt en complete tijdlijn met 10 onderzoeken**
-Vervang de huidige testdata door een realistische patiënt "M.E. van den Berg" met een tijdlijn van 10 onderzoeken (7 beelden + 4 verslagen) over 3 zorgaanbieders. Elk DICOM-bestand wordt maximaal 1x gebruikt.
+**Issue #12: Disclaimer onthouden met localStorage**
+De disclaimer-banner neemt ~30% van het scherm in en verschijnt elke sessie opnieuw. Gebruik `localStorage` om de dismiss-keuze te onthouden. Bestanden: `src/components/DisclaimerBanner.tsx`.
 
-**Issue #2: Unieke DICOM-toewijzing — geen hergebruik van bestanden**
-Wijs alle 7 beschikbare DICOM-bestanden uit de GitHub repo elk precies 1x toe aan een tijdlijn-item. Huidige situatie: bestanden worden meermaals gebruikt waardoor beelden identiek lijken.
+**Issue #13: Dashboard verrijken met recente activiteit**
+De homepage toont alleen tellingen. Voeg een "Recente onderzoeken" sectie toe met de laatste 3-5 items als klikbare kaarten. Bestanden: `src/pages/Index.tsx`.
 
-**Issue #3: PDF-verslagen laden niet (worker URL fout)**
-De `react-pdf` v10 worker URL resolvet niet correct, waardoor alle PDF-verslagen "Fout bij laden van PDF" tonen. Fix de worker URL in `ReportViewer.tsx`.
+**Issue #14: Responsive standaard weergave (mobiel=tijdlijn, desktop=tabel)**
+Gebruik de `useIsMobile` hook om automatisch de tijdlijnweergave te tonen op mobiel en de tabelweergave op desktop. Bestanden: `src/pages/OverviewPage.tsx`.
 
-**Issue #4: Verslagdata uitbreiden naar 4 rapporten**
-Update `reportData.ts` met report-ID's die aansluiten bij de nieuwe tijdlijn (rpt-1 t/m rpt-4), zodat verslagen correct laden bij de bijbehorende onderzoeken.
+**Issue #15: Visuele groepering van gekoppelde documenten in tabel**
+Groepeer beeld+verslag rijen die dezelfde `accessionNumber` delen met een subtiele achtergrondkleur of inspringing, zodat de relatie visueel duidelijk is. Bestanden: `src/components/DocumentTable.tsx`.
+
+**Issue #16: Breadcrumbs op detailpagina's**
+Voeg breadcrumb-navigatie toe aan detailpagina's (Home > Beelden en verslagen > [Documenttitel]) voor betere oriëntatie. Bestanden: `src/pages/DetailPage.tsx`, gebruik bestaand `src/components/ui/breadcrumb.tsx`.
+
+### Stap 2: Implementatie (na goedkeuring)
+Issues worden sequentieel opgelost, te beginnen met de eenvoudigste (disclaimer, breadcrumbs) en eindigend met de complexere (tabelgroepering, dashboard).
 
 ### Technisch
-- Eenmalig script via `code--exec` met `curl` naar `api.github.com`
-- Gebruikt het bestaande `GITHUB_TOKEN` secret
+- Issues aanmaken via `curl` naar GitHub API met het `GITHUB_TOKEN` secret
 - Repository: `jasprin/medmij-prototype-bbs`
-- Issues worden aangemaakt met labels waar mogelijk
+- Ook de bestaande build error fixen: `ReportViewer.tsx` importeert `reportPdfSources` correct uit `reportData.ts` — dit lijkt een stale cache; wordt geverifieerd bij implementatie
+- Geen nieuwe dependencies nodig
 
