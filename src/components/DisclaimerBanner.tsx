@@ -1,24 +1,11 @@
 import { useState } from "react";
 import { AlertTriangle, Clock, X } from "lucide-react";
 
-const STORAGE_KEY = "disclaimer-dismissed";
-
 function DisclaimerBanner() {
-  const [showDisclaimer, setShowDisclaimer] = useState(() => {
-    try {
-      return localStorage.getItem(STORAGE_KEY) !== "true";
-    } catch {
-      return true;
-    }
-  });
+  const [showDisclaimer, setShowDisclaimer] = useState(true);
 
   const handleDismiss = () => {
     setShowDisclaimer(false);
-    try {
-      localStorage.setItem(STORAGE_KEY, "true");
-    } catch {
-      // ignore
-    }
   };
 
   if (!showDisclaimer) return null;
